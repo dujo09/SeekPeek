@@ -18,7 +18,7 @@
 Module: error_handlers
 """
 from flask import jsonify
-from service import app
+from app import app
 from . import status
 
 

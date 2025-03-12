@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const questions = [
   "Podignuta razina kvalitete javnih usluga (Poboljšava zadovljstvo građana i njihovu interakciju s javnim sektorom)",
@@ -27,7 +28,11 @@ export function Form() {
   }
 
   async function getAnswerSuggerstion(question) {
-    return "Odgovor na: " + question;
+    const response = await axios.post("http://127.0.0.1:5001/getAiResponse", {
+      question,
+    });
+    console.log(response.data);
+    return response.data.answer;
   }
 
   return (
