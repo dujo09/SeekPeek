@@ -1,20 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import formFieldGroupsJSON from "./formFields.json";
 
-const questions = [
-  "Podignuta razina kvalitete javnih usluga (Poboljšava zadovljstvo građana i njihovu interakciju s javnim sektorom)",
-  "Stvaranje novih radnih mjesta (Povećana zaposlenost, smanjuje, socijalnu nejednakost i doprinosi ekonomskom blagostanju)",
-  "Poboljšana mogućnost sudjelovanja u procesima javne uprave (Omogućuje demokratičniji pristup odlučivanju i povećava transparentnost)",
-  "Podignuta razina kvalitete života (Sveukupno poboljšanje uvjeta života kroz bolje usluge, javni prostor i sigurnost)",
-  "Podignuta razina sigurnosti (Smanjuje rizike i povećava osjećaj sigurnosti građana)",
-  "Podignuta razina podrške ranjivim skupinama (Promiče socijalnu jednakost i inkluziju)",
-  "Jačanje digitalne pismenosti i tehnologije (Potiče korištenje suvremenih tehnologija za svakodnevni život i poslovanje)",
-  "Promicanje rodne ravnopravnosti (Osigurava jednake prilike za sve skupine u društvu)",
-  "Smanjenje socijalne isključenosti (Omogućuje pristup resursima i uslugama marginaliziranim skupinama)",
-  "Smanjenje troškova života (Kroz učinkovitiju infrastrukturu i javne usluge smanjuje financijsko opterećenje građana)",
-  "Razvoj lokalne zajednice (Osnažuje koheziju i povezanost unutar zajednice)",
-];
+const economicImpactFields = [];
+
+const environmentalImpactFields = [];
+
+const infrastructuralImpactFields = [];
 
 export function Form() {
   const {
@@ -23,49 +16,84 @@ export function Form() {
     formState: { errors },
     setValue,
   } = useForm({});
+  const [loadingFields, setLoadingFields] = useState([]);
+
+  useEffect(() => {
+    console.log(formFieldGroupsJSON);
+  }, []);
+
   async function onSubmit(data) {
-    console.log(data);
+    const answers = [];
+    Object.keys(data).forEach(function (key, index) {
+      answers.push({ question: key, answer: data[key] });
+    });
+
+    console.log(answers);
   }
 
-  async function getAnswerSuggerstion(question) {
+  async function getAnswerSuggerstion(fieldLabel, fieldId) {
+    setLoadingFields((prevLoadingFields) => [...prevLoadingFields, fieldId]);
+
+    const question = "Odogovori na pitanje: " + fieldLabel;
+
     const response = await axios.post("http://127.0.0.1:5001/getAiResponse", {
       question,
     });
-    console.log(response.data);
-    return response.data.answer;
+    const answer = response.data.answer.output;
+    console.log("Response for getAnswerSuggestion: " + answer);
+
+    setLoadingFields((prevLoadingFields) => {
+      return prevLoadingFields.filter((field) => field !== fieldId);
+    });
+    return answer;
   }
 
   return (
-    <div className="w-[95vw] mx-auto">
-      <p className="text-3xl uppercase text-center">Forma</p>
+    <div className="w-full">
+      <p className="text-3xl uppercase text-center mb-5">Forma za prijavnicu</p>
       <form
-        className="flex flex-col space-y-5 max-h-[90vh] overflow-y-scroll"
+        className="flex flex-col space-y-5 max-h-[90vh] max-w-4/5 mx-auto "
         onSubmit={handleSubmit(onSubmit)}
       >
-        {questions.map((question) => (
-          <div key={question} className="flex flex-col">
-            <label className="text-md">{question} </label>
-            <input
-              className="bg-slate-200 p-2"
-              {...register(question, { required: true })}
-            />
-            <button
-              className="rounded-full bg-blue-500 w-fit px-5 my-2 mx-auto font-medium text-white"
-              type="button"
-              onClick={async () =>
-                setValue(question, await getAnswerSuggerstion(question))
-              }
-            >
-              Get suggestion
-            </button>
-            {errors[question] && (
-              <span className="text-red-600">Field is required!</span>
-            )}
+        {formFieldGroupsJSON.map((formFieldGroup) => (
+          <div
+            className="mx-auto bg-slate-100 p-10 rounded-lg"
+            key={formFieldGroup.id}
+          >
+            <p className="text-xl uppercase text-center">
+              {formFieldGroup.fieldGroupLabel}
+            </p>
+            {formFieldGroup.fields.map((field) => (
+              <div key={field.id} className="flex flex-col">
+                <label className="text-md">{field.question}</label>
+                <textarea
+                  className="bg-blue-200 p-2 h-64 rounded-lg"
+                  {...register(field.question)}
+                />
+                <button
+                  disabled={loadingFields.includes(field.id)}
+                  className="rounded-full bg-blue-500 w-fit px-5 my-2 mx-auto font-medium text-white disabled:bg-blue-300 hover:bg-blue-300 "
+                  type="button"
+                  onClick={async () =>
+                    setValue(
+                      field.question,
+                      await getAnswerSuggerstion(field.question, field.id),
+                    )
+                  }
+                >
+                  {loadingFields.includes(field.id)
+                    ? "Loading..."
+                    : "Get suggestion"}
+                </button>
+                {errors[field.question] && (
+                  <span className="text-red-600">Field is required!</span>
+                )}
+              </div>
+            ))}
           </div>
         ))}
-
         <input
-          className="bg-blue-500 p-2 font-medium text-white upercase"
+          className="bg-blue-500 p-2 font-medium text-white upercase  hover:bg-blue-300 "
           type="submit"
         />
       </form>
