@@ -2,9 +2,32 @@
 Service Package
 """
 import requests
+# import ctypes
+import clr
+import System
+import sys
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 from common import status
+
+# Add the DLL path (Adjust path if necessary)
+# sys.path.append(r"C:\Users\LARAZ-PC\Desktop\seekExcel\SeekPeek\bin\Debug\net9.0\SeekPeek.dll")  # Change this to the correct DLL location
+ 
+# Load the DLL
+clr.AddReference("C:\\Users\\LARAZ-PC\\Desktop\\seekExcel\\SeekPeek\\bin\\Debug\\net9.0\\SeekPeek.dll")  # Reference your compiled DLL
+
+for asm in System.AppDomain.CurrentDomain.GetAssemblies():
+    print(asm.FullName)
+ 
+# Import the namespace
+from YourCSharpLibrary import FibonacciCalculator
+
+# clr.AddReference("C:\\Users\\LARAZ-PC\\Desktop\\seekExcel\\SeekPeek\\bin\\Debug\\net9.0\\SeekPeek.dll")
+
+# from SeekPeek.YourCSharpLibrary import FibonacciCalculator
+
+result = FibonacciCalculator.Calculate(10)
+print(result)  # Output: 55
 
 AI_API_URL = "https://rg-ent-poc-euwe-seekpeek-rwncr.westeurope.inference.ml.azure.com/score"
 AI_API_KEY = "4lf1BQnLEKotUUwbeJbOPjleN0ihIZgZStiPtD3XewF8DmdjBwE6JQQJ99BCAAAAAAAAAAAAINFRAZML2OX2"
@@ -35,3 +58,6 @@ def getAiResponse():
     print(f"AI RESPONSE: {ai_response}")
 
     return jsonify(answer=ai_response), status.HTTP_200_OK
+
+# a = ctypes.cdll.LoadLibrary("C:\\Users\\LARAZ-PC\\Desktop\\seekExcel\\SeekPeek\\bin\\Debug\\net9.0\\SeekPeek.dll")
+# print(a.add(3, 5))
