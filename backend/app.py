@@ -3,8 +3,11 @@ Service Package
 """
 import requests
 from flask import Flask, jsonify, abort, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from common import status
+
+AI_API_URL = "https://rg-ent-poc-euwe-seekpeek-rwncr.westeurope.inference.ml.azure.com/score"
+AI_API_KEY = "4lf1BQnLEKotUUwbeJbOPjleN0ihIZgZStiPtD3XewF8DmdjBwE6JQQJ99BCAAAAAAAAAAAAINFRAZML2OX2"
 
 app = Flask(__name__)
 CORS(app)
@@ -20,20 +23,15 @@ def getAiResponse():
         return abort(status.HTTP_400_BAD_REQUEST, "Missing 'question' in request body")
 
     question = data["question"]
-    app.logger.info("Received question: %s", question)
 
-    # try:
-    #     response = requests.post(AI_API_URL, json={"question": question})
-    #     response.raise_for_status() #Ako AI API vrati grešku, podići će izuzetak
-    # except requests.RequestException as e:
-    #     app.logger.error("Error contacting AI API: %s", str(e))
-    #     return abort(status.HTTP_500_INTERNAL_SERVER_ERROR, "Error contacting AI service")
+    try:
+        response = requests.post(AI_API_URL, json={"question": question}, headers={"Accept": "application/json", "Authorization": f"Bearer {AI_API_KEY}", "Content-Type": "application/json"})
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Error contacting AI API: {str(e)}")
+        return abort(status.HTTP_500_INTERNAL_SERVER_ERROR, "Error contacting AI service")
 
-    # ai_response = response.json()
-    # if "answer" not in ai_response:
-    #     return abort(status.HTTP_500_INTERNAL_SERVER_ERROR, "Invalid response from AI service")
+    ai_response = response.json()
+    print(f"AI RESPONSE: {ai_response}")
 
-    # answer = ai_response["answer"]
-    # app.logger.info("AI response: %s", answer)
-
-    return jsonify(answer="temporary hardcoded answer"), status.HTTP_200_OK
+    return jsonify(answer=ai_response), status.HTTP_200_OK
