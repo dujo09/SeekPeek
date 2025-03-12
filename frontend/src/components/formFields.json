@@ -1,0 +1,134 @@
+[
+  {
+    "id": "1",
+    "fieldGroupLabel": "Društveni utjecaj projekta",
+    "fields": [
+      {
+        "id": "1",
+        "question": "Podignuta razina kvalitete javnih usluga (Poboljšava zadovljstvo građana i njihovu interakciju s javnim sektorom)"
+      },
+      {
+        "id": 2,
+        "question": "Stvaranje novih radnih mjesta (Povećana zaposlenost, smanjuje, socijalnu nejednakost i doprinosi ekonomskom blagostanju)"
+      },
+      {
+        "id": 3,
+        "question": "Poboljšana mogućnost sudjelovanja u procesima javne uprave (Omogućuje demokratičniji pristup odlučivanju i povećava transparentnost)"
+      },
+      {
+        "id": 4,
+        "question": "Podignuta razina kvalitete života (Sveukupno poboljšanje uvjeta života kroz bolje usluge, javni prostor i sigurnost)"
+      },
+      {
+        "id": 5,
+        "question": "Podignuta razina sigurnosti (Smanjuje rizike i povećava osjećaj sigurnosti građana)"
+      },
+      {
+        "id": 6,
+        "question": "Podignuta razina podrške ranjivim skupinama (Promiče socijalnu jednakost i inkluziju)"
+      },
+      {
+        "id": 7,
+        "question": "Jačanje digitalne pismenosti i tehnologije (Potiče korištenje suvremenih tehnologija za svakodnevni život i poslovanje)"
+      },
+      {
+        "id": 8,
+        "question": "Promicanje rodne ravnopravnosti (Osigurava jednake prilike za sve skupine u društvu)"
+      },
+      {
+        "id": 9,
+        "question": "Smanjenje socijalne isključenosti (Omogućuje pristup resursima i uslugama marginaliziranim skupinama)"
+      },
+      {
+        "id": 10,
+        "question": "Smanjenje troškova života (Kroz učinkovitiju infrastrukturu i javne usluge smanjuje financijsko opterećenje građana)"
+      },
+      {
+        "id": 11,
+        "question": "Razvoj lokalne zajednice (Osnažuje koheziju i povezanost unutar zajednice)"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "fieldGroupLabel": "Ekonomski utjecaj projekta",
+    "fields": [
+      {
+        "id": 12,
+        "question": "Učinkovitije korištenje javnih sredstava (Omogućuje racionalniji razvoj projekata)"
+      },
+      {
+        "id": 13,
+        "question": "Poticanje participativnog budžetiranja (Omogućuje građanima sudjelovanje u raspodjeli javnih sredstava)"
+      },
+      {
+        "id": 14,
+        "question": "Posredno privlačenje investicija (Povećava atraktivnost područja za ulaganja)"
+      },
+      {
+        "id": 15,
+        "question": "Povećanje konkurentnosti gospodarstva (Omogućuje tvrtkama da budu produktivnije i inovativnije)"
+      },
+      {
+        "id": 16,
+        "question": "Promicanje održivog turizma (Razvija ponude koje čuvaju prirodne i kulturne resurse)"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "fieldGroupLabel": "Okolišni utjecaj projekta",
+    "fields": [
+      {
+        "id": 17,
+        "question": "Smanjene štetne emisije u okoliš (Doprinosi borbi protiv klimatskih promjena)"
+      },
+      {
+        "id": 18,
+        "question": "Poboljšano stanje okoliša (Čuva prirodu i podiže kvalitetu života)"
+      },
+      {
+        "id": 19,
+        "question": "Povećana otpornost na klimatske promjene (Smanjuje ranjivost zajednica na ekstremne vremenske uvjete)"
+      },
+      {
+        "id": 20,
+        "question": "Unaprjeđenje energetske učinkovitosti (Potiče korištenje obnovljivih izvora energije i smanjuje potrošnju energije)"
+      },
+      {
+        "id": 21,
+        "question": "Podrška cirkularnoj ekonomiji (Potiče recikliranje, ponovnu upotrebu i održivo gospodarenje otpadom)"
+      },
+      {
+        "id": 22,
+        "question": "Očuvanje kulturne baštine(Povezuje povijesnu vrijednost s očuvanjem okoliša)"
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "fieldGroupLabel": "Infrastrukturni i resursni utjecaj projekta",
+    "fields": [
+      {
+        "id": 23,
+        "question": "Optimalizacija infrastrukture (Povećava učinkovitost i kapacitet postojećih sustava)"
+      },
+      {
+        "id": 24,
+        "question": "Napredak u upravljanju resursima (Smanjuje rasipanje i osigurava održivost)"
+      },
+      {
+        "id": 25,
+        "question": "Povećanje dostupnosti mobilnosti i javnog prijevoza (Poboljšava prometnu povezanost, smanjuje gužve i povećava održivost)"
+      },
+      {
+        "id": 26,
+        "question": "Razvoj socijalne infrastrukture (Povećava dostupnost vrtića, škola, domova za starije osobe i drugih društveno važnih objekata)"
+      },
+      {
+        "id": 27,
+        "question": "Podignuta razina kvalitete javnog prostora (Poboljšava dizajn, funkcionalnost i iskustvo korištenja prostora)"
+      }
+    ]
+  }
+]
