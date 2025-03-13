@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import formFieldGroupsJSON from "./formFields.json";
-
-const economicImpactFields = [];
-
-const environmentalImpactFields = [];
-
-const infrastructuralImpactFields = [];
+import saveAs from "file-saver";
 
 export function Form() {
   const {
@@ -28,7 +23,16 @@ export function Form() {
       answers.push({ question: key, answer: data[key] });
     });
 
-    console.log(answers);
+    const response = await axios.post("http://127.0.0.1:5001/getExcel", {
+      answers: JSON.stringify(answers),
+    }, {    responseType: 'blob',});
+    // console.log("Response for getExcel: " + response.data);
+
+    var blob = new Blob([response.data], {
+      type: "text/plain;charset=utf-8",
+    });
+    saveAs(blob, `obrazac-output.xlsx`);
+
   }
 
   async function getAnswerSuggerstion(fieldLabel, fieldId) {
@@ -57,17 +61,17 @@ export function Form() {
       >
         {formFieldGroupsJSON.map((formFieldGroup) => (
           <div
-            className="mx-auto bg-slate-100 p-10 rounded-lg"
+            className="mx-auto bg-slate-100 p-10 rounded-lg w-full"
             key={formFieldGroup.id}
           >
-            <p className="text-xl uppercase text-center">
+            <p className="text-xl uppercase text-center mb-2">
               {formFieldGroup.fieldGroupLabel}
             </p>
             {formFieldGroup.fields.map((field) => (
               <div key={field.id} className="flex flex-col">
                 <label className="text-md">{field.question}</label>
                 <textarea
-                  className="bg-blue-200 p-2 h-64 rounded-lg"
+                  className="bg-blue-200 p-2 h-64 rounded-lg w-full"
                   {...register(field.question)}
                 />
                 <button
@@ -93,7 +97,7 @@ export function Form() {
           </div>
         ))}
         <input
-          className="bg-blue-500 p-2 font-medium text-white upercase  hover:bg-blue-300 "
+          className="bg-blue-500 p-2 font-medium text-white upercase hover:bg-blue-300"
           type="submit"
         />
       </form>

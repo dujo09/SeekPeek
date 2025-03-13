@@ -6,28 +6,13 @@ import requests
 import clr
 import System
 import sys
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, make_response, send_file
 from flask_cors import CORS
 from common import status
-
-# Add the DLL path (Adjust path if necessary)
-# sys.path.append(r"C:\Users\LARAZ-PC\Desktop\seekExcel\SeekPeek\bin\Debug\net9.0\SeekPeek.dll")  # Change this to the correct DLL location
- 
-# Load the DLL
-clr.AddReference("C:\\Users\\LARAZ-PC\\Desktop\\seekExcel\\SeekPeek\\bin\\Debug\\net9.0\\SeekPeek.dll")  # Reference your compiled DLL
-
-for asm in System.AppDomain.CurrentDomain.GetAssemblies():
-    print(asm.FullName)
- 
-# Import the namespace
-from YourCSharpLibrary import FibonacciCalculator
-
-# clr.AddReference("C:\\Users\\LARAZ-PC\\Desktop\\seekExcel\\SeekPeek\\bin\\Debug\\net9.0\\SeekPeek.dll")
-
-# from SeekPeek.YourCSharpLibrary import FibonacciCalculator
-
-result = FibonacciCalculator.Calculate(10)
-print(result)  # Output: 55
+import os
+import pythonnet
+import subprocess
+import json
 
 AI_API_URL = "https://rg-ent-poc-euwe-seekpeek-rwncr.westeurope.inference.ml.azure.com/score"
 AI_API_KEY = "4lf1BQnLEKotUUwbeJbOPjleN0ihIZgZStiPtD3XewF8DmdjBwE6JQQJ99BCAAAAAAAAAAAAINFRAZML2OX2"
@@ -59,5 +44,28 @@ def getAiResponse():
 
     return jsonify(answer=ai_response), status.HTTP_200_OK
 
-# a = ctypes.cdll.LoadLibrary("C:\\Users\\LARAZ-PC\\Desktop\\seekExcel\\SeekPeek\\bin\\Debug\\net9.0\\SeekPeek.dll")
-# print(a.add(3, 5))
+@app.route("/getExcel", methods=["POST"])
+def getExcel():
+    """Prima formu od frontenda i generira excel"""
+
+    data = request.get_json()
+    print(f"Recieved POST request at /getExcel")
+
+    if not data or "answers" not in data:
+        return abort(status.HTTP_400_BAD_REQUEST, "Missing 'question' in request body")
+
+    answers = data["answers"]
+    with open("data.txt","w", encoding="utf-8") as file:
+        file.write(answers)
+
+    csprojPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "generateExcel", "SeekPeek", "SeekPeek.csproj")
+    requestDataPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data.txt")
+
+    subprocess.run(["dotnet", "run", "--project", csprojPath, requestDataPath], stdout=subprocess.PIPE)
+
+    excelFullFilePath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "generateExcel", "obrazac-output.xlsx")
+
+    if os.path.isfile(excelFullFilePath):
+        return send_file(excelFullFilePath, as_attachment=True)
+    else:
+        return make_response("Excel file not found.", status.HTTP_404_NOT_FOUND)
